@@ -1,31 +1,58 @@
 import streamlit as st
 import joblib
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
 # Load model & scaler
 model = joblib.load("models/cardio_logreg_basic.joblib")
 scaler = joblib.load("models/cardio_scaler_basic.joblib")
 
-st.set_page_config(page_title="Cardio Predictor")
+st.set_page_config(page_title="Cardio Risk Predictor", layout="wide")
 
-st.title("❤️ Cardiovascular Disease Predictor")
-st.write("Enter patient details below:")
+# ---------- HEADER ----------
+st.markdown("""
+# ❤️ Cardiovascular Risk Predictor
+### Simple AI-powered heart risk assessment
+""")
 
-# Inputs
-age = st.number_input("Age (years)", 18, 100)
-height = st.number_input("Height (cm)", 100, 220)
-weight = st.number_input("Weight (kg)", 30.0, 200.0)
-ap_hi = st.number_input("Systolic BP")
-ap_lo = st.number_input("Diastolic BP")
+st.divider()
 
-gender = st.selectbox("Gender (1:Female, 2:Male)", [1,2])
-cholesterol = st.selectbox("Cholesterol (1:Normal,2:Above,3:High)", [1,2,3])
-gluc = st.selectbox("Glucose (1:Normal,2:Above,3:High)", [1,2,3])
-smoke = st.selectbox("Smoking (0:No,1:Yes)", [0,1])
-alco = st.selectbox("Alcohol (0:No,1:Yes)", [0,1])
-active = st.selectbox("Physically Active (0:No,1:Yes)", [0,1])
+# ---------- LAYOUT ----------
+col1, col2 = st.columns(2)
 
-if st.button("Predict"):
+with col1:
+    st.subheader("🧍 Basic Information")
+    age = st.slider("Age (years)", 18, 80, 30)
+    gender = st.selectbox("Gender", ["Female", "Male"])
+    height = st.slider("Height (cm)", 140, 210, 170)
+    weight = st.slider("Weight (kg)", 40, 150, 70)
+
+with col2:
+    st.subheader("🫀 Health Metrics")
+    ap_hi = st.slider("Systolic BP", 90, 200, 120)
+    ap_lo = st.slider("Diastolic BP", 60, 140, 80)
+    cholesterol = st.selectbox(
+        "Cholesterol Level",
+        ["Normal", "Above Normal", "High"]
+    )
+
+st.divider()
+
+# ---------- ADVANCED MODE ----------
+with st.expander("Advanced Options (Optional)"):
+    gluc = st.selectbox("Glucose Level", [1,2,3], index=0)
+    smoke = st.selectbox("Smoking", [0,1], index=0)
+    alco = st.selectbox("Alcohol", [0,1], index=0)
+    active = st.selectbox("Physically Active", [0,1], index=1)
+
+# Convert categorical to numeric
+gender_val = 1 if gender == "Female" else 2
+chol_map = {"Normal":1, "Above Normal":2, "High":3}
+chol_val = chol_map[cholesterol]
+
+# ---------- PREDICT ----------
+if st.button("🔍 Assess Risk", use_container_width=True):
 
     height_m = height / 100
     bmi = weight / (height_m ** 2)
@@ -37,25 +64,50 @@ if st.button("Predict"):
         ap_hi,
         ap_lo,
         bmi,
-        gender,
-        cholesterol,
+        gender_val,
+        chol_val,
         gluc,
         smoke,
         alco,
         active
     ]).reshape(1, -1)
 
-    # Scale first 6 numeric features
     input_data[:, :6] = scaler.transform(input_data[:, :6])
 
     prediction = model.predict(input_data)[0]
     probability = model.predict_proba(input_data)[0][1]
 
-    st.subheader("Result")
+    st.divider()
+    st.subheader("📊 Assessment Result")
 
+    # ---------------- FINAL DISEASE RESULT ----------------
     if prediction == 1:
-        st.error("⚠️ High Risk of Cardiovascular Disease")
+        st.error("⚠️ The model predicts that the patient is likely to have Cardiovascular Disease.")
+        final_text = "LIKELY TO HAVE DISEASE"
     else:
-        st.success("✅ Low Risk of Cardiovascular Disease")
+        st.success("✅ The model predicts that the patient is NOT likely to have Cardiovascular Disease.")
+        final_text = "NOT LIKELY TO HAVE DISEASE"
 
-    st.write(f"Risk Probability: {probability:.2f}")
+    # Risk Percentage
+    st.metric("Predicted Risk Probability", f"{probability*100:.1f}%")
+
+    # ---------------- RISK BAR GRAPH ----------------
+    st.subheader("Risk Distribution")
+    chart_data = {
+        "Category": ["No Disease", "Disease"],
+        "Probability": [1 - probability, probability]
+    }
+
+    st.bar_chart(chart_data, x="Category", y="Probability")
+
+    # ---------------- SUMMARY BOX ----------------
+    st.divider()
+    st.markdown("### 🩺 Final Summary")
+
+    st.info(f"""
+    • **Final Prediction:** {final_text}  
+    • **Risk Score:** {probability*100:.1f}%  
+    • **Calculated BMI:** {bmi:.2f}  
+
+    ⚠️ This prediction is based on a machine learning model and should not replace professional medical advice.
+    """)
