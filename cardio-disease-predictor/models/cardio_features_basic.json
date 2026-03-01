@@ -1,0 +1,1 @@
+{"numeric_features": ["age_years", "height", "weight", "ap_hi", "ap_lo", "bmi"], "other_features": ["gender", "cholesterol", "gluc", "smoke", "alco", "active"], "final_feature_names": ["age_years", "height", "weight", "ap_hi", "ap_lo", "bmi", "gender", "cholesterol", "gluc", "smoke", "alco", "active"]}
