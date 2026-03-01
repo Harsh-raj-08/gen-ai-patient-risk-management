@@ -5,14 +5,18 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import os
-import streamlit as st
+import joblib
 
-st.write("Current working directory:", os.getcwd())
-st.write("Files in root:", os.listdir())
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+MODEL_PATH = os.path.join(BASE_DIR, "models", "cardio_logreg_basic.joblib")
+SCALER_PATH = os.path.join(BASE_DIR, "models", "cardio_scaler_basic.joblib")
+
+model = joblib.load(MODEL_PATH)
+scaler = joblib.load(SCALER_PATH)
 # Load model & scaler
-model = joblib.load("models/cardio_logreg_basic.joblib")
-scaler = joblib.load("models/cardio_scaler_basic.joblib")
+# model = joblib.load("models/cardio_logreg_basic.joblib")
+# scaler = joblib.load("models/cardio_scaler_basic.joblib")
 
 st.set_page_config(page_title="Cardio Risk Predictor", layout="wide")
 
