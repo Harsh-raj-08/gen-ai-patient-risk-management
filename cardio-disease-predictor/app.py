@@ -4,6 +4,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import os
+import streamlit as st
+
+st.write("Current working directory:", os.getcwd())
+st.write("Files in root:", os.listdir())
+
 # Load model & scaler
 model = joblib.load("models/cardio_logreg_basic.joblib")
 scaler = joblib.load("models/cardio_scaler_basic.joblib")
