@@ -101,7 +101,7 @@ if st.button("🔍 Assess Risk", use_container_width=True):
     # Risk Percentage
     st.metric("Predicted Risk Probability", f"{probability*100:.1f}%")
 
-    # ---------------- RISK BAR GRAPH ----------------
+  
     st.subheader("Risk Distribution")
     chart_data = {
         "Category": ["No Disease", "Disease"],
