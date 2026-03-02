@@ -87,7 +87,7 @@ if st.button("🔍 Assess Risk", use_container_width=True):
     prediction = model.predict(input_data)[0]
     probability = model.predict_proba(input_data)[0][1]
 
-  v
+    st.divider()
     st.subheader("📊 Assessment Result")
 
     # ---------------- FINAL DISEASE RESULT ----------------
