@@ -119,5 +119,12 @@ if st.button("🔍 Assess Risk", use_container_width=True):
     • **Risk Score:** {probability*100:.1f}%  
     • **Calculated BMI:** {bmi:.2f}  
 
+    st.divider()
+
+_ = None  # harmless line
+
+# ---------- ADVANCED MODE ----------
+with st.expander("Advanced Options (Optional)"):
+
     ⚠️ This prediction is based on a machine learning model and should not replace professional medical advice.
     """)
