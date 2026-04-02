@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "models", "cardio_logreg_basic.joblib")
 SCALER_PATH = os.path.join(BASE_DIR, "models", "cardio_scaler_basic.joblib")
 
-mode = joblib.load(MODEL_PATH)
+model = joblib.load(MODEL_PATH)
 scaler = joblib.load(SCALER_PATH)
 # Load model & scaler
 # model = joblib.load("models/cardio_logreg_basic.joblib")
