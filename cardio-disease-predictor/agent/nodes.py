@@ -13,7 +13,8 @@ from agent.state import AgentState
 from agent.prompts import SYSTEM_BASE, RISK_ANALYZER_PROMPT, REPORT_GENERATOR_PROMPT
 from rag.retriever import retrieve_guidelines
 
-load_dotenv()
+env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+load_dotenv(dotenv_path=env_path)
 
 # ─────────────────────────────────────────────────
 # LLM provider setup (Groq or Gemini)

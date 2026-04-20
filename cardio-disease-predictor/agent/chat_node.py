@@ -8,7 +8,8 @@ import json
 from dotenv import load_dotenv
 from agent.prompts import CHAT_AGENT_PROMPT, SYSTEM_BASE
 
-load_dotenv()
+env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+load_dotenv(dotenv_path=env_path)
 
 
 def _get_chat_llm():
