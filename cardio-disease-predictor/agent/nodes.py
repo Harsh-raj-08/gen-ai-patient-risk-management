@@ -14,7 +14,7 @@ from agent.prompts import SYSTEM_BASE, RISK_ANALYZER_PROMPT, REPORT_GENERATOR_PR
 from rag.retriever import retrieve_guidelines
 
 env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
-load_dotenv(dotenv_path=env_path)
+load_dotenv(dotenv_path=env_path, override=True)
 
 # ─────────────────────────────────────────────────
 # LLM provider setup (Groq or Gemini)
