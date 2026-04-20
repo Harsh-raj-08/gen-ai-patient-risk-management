@@ -17,7 +17,8 @@ env/
 .env
 
 # ChromaDB vector store (auto-generated)
-chroma_db/
+# (Commented out so it pushes to Streamlit Cloud)
+# chroma_db/
 
 # macOS
 .DS_Store
